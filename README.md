@@ -12,8 +12,8 @@ Desenvolvimento de um aplicativo mobile para fazer o CRUD (cadastro, leitura, at
 
 ### Requisitos
 
- - Back-end: (https://github.com/thiagoFernandesz/back-end-MongoDB)
- - Node
+ - Back-end: https://github.com/thiagoFernandesz/back-end-MongoDB
+ - Node.js
  - React Native
  
 ### Começando
