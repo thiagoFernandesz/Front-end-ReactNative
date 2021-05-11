@@ -13,44 +13,52 @@ import {
   Alert,
 } from 'react-native'
 import { AsyncStorage } from '@react-native-async-storage/async-storage'
+import api from '../../services/api'
 
 export default function Login({ navigation }) {
   const [name, setName] = useState(null)
   const [cpf, setCpf] = useState(null)
-  const [cpfField, setCpfField] = useState(null)
+  //const [cpfField, setCpfField] = useState(null)
   const [email, setEmail] = useState(null)
   const [password, setPassword] = useState(null)
 
   async function handleRegister() {
     try {
-      if (!cpfField.isValid()) return Alert.alert('CPF não é valido!')
+      //if (!cpfField.isValid()) return Alert.alert('CPF não é valido!')
 
-      const response = await api.post('/register', {
+      const response = await api.post('/auth/cadastro', {
         name,
-        cpf: cpfField.getRawValue(),
+        cpf,
         email,
         password,
       })
+      console.log(response.data.newUser)
+      const { newUser, token } = response.data
 
-      const { dataUserToCreate, token } = response.data
+      Alert.alert("Usuário cadastrado")
 
       await AsyncStorage.multiSet([
         ['token', token],
-        ['user', JSON.stringify(dataUserToCreate)],
+        ['user', JSON.stringify(newUser)],
       ])
+      
+      console.log("Cadastrou")
+      //handleNavigation()
 
-      handleNavigation()
     } catch (response) {
-      Alert.alert(response.data.message)
+      console.log("Não cadastrou")
+      Alert.alert(response.data.error)
     }
   }
 
-  async function handleNavigation() {
-    const user = JSON.parse(await AsyncStorage.getItem('user'))
+  function handleNavigation() {
+    //const user = JSON.parse(await AsyncStorage.getItem('user'))
 
-    if (user.nivel === 1) navigation.navigate('DashboardUser')
+    /*if (user.level === 1) navigation.navigate('DashboardUser')
 
-    if (user.nivel === 999) navigation.navigate('DashboardAdm')
+    if (user.level === 999) navigation.navigate('DashboardAdm')*/
+
+    navigation.navigate('Login')
 
     return
   }
@@ -76,12 +84,7 @@ export default function Login({ navigation }) {
           type={'cpf'}
           value={cpf}
           style={styles.input}
-          onChangeText={(text, ref = null) => {
-            setCpf(text)
-          }}
-          ref={(ref) => {
-            setCpfField(ref)
-          }}
+          onChangeText={(value) => setCpf(value)}
         />
         <TextInput
           placeholder="Digite seu e-mail"
@@ -95,8 +98,10 @@ export default function Login({ navigation }) {
           onChangeText={(value) => setPassword(value)}
         />
 
-        <TouchableOpacity style={styles.btnCadastrar} onPress={handleRegister}>
-          <Text style={styles.btnTextCadastrar}>Cadastrar</Text>
+        <TouchableOpacity style={styles.btnCadastrar} onPress={() => handleRegister()}>
+          <Text 
+          style={styles.btnTextCadastrar}
+        >Cadastrar</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnVoltar}

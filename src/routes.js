@@ -8,6 +8,7 @@ import ProfileMe from './pages/usuario/Profile'
 import DashboardAdm from './pages/administrador/Dashboard'
 import UserList from './pages/administrador/UserList'
 import ProfileUser from './pages/administrador/ProfileUser'
+//Login, Register, Dashboard, DashboardU
 
 const Routes = createAppContainer(
   createStackNavigator(

@@ -36,7 +36,6 @@ export default function Dashboard({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header />
-      <Avatar />
       <View style={styles.divButton}>
         <TouchableOpacity
           style={styles.button}

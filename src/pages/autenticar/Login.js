@@ -11,20 +11,26 @@ import {
   Text,
   Image,
   Alert,
+  AsyncStorage
 } from 'react-native'
-import { AsyncStorage } from '@react-native-async-storage/async-storage'
+//import { AsyncStorage } from '@react-native-async-storage/async-storage'
+import  { useNavigation} from '@react-navigation/core'
+import api from '../../services/api'
 
 export default function Login({ navigation }) {
   const [usuario, setUsuario] = useState(null)
   const [password, setPassword] = useState(null)
 
-  useEffect(() => {
-    checkToken()
-  }, [])
+  /*useEffect(() => {
+    async() => {
+      const token = await AsyncStorage.getItem('token')
+      const user = JSON.parse(await AsyncStorage.getItem('user'))
+    }
+  }, [])*/
 
   async function signIn() {
     try {
-      const response = await ('/login', {
+      const response = await api.post('/auth/login', {
         usuario,
         password,
       })
@@ -39,18 +45,21 @@ export default function Login({ navigation }) {
       setUsuario(null)
       setPassword(null)
 
+      console.log(response.data.user)
+
       handleNavigation()
     } catch (response) {
-      Alert.alert(response.data.message)
+      console.log('Deu ruim', response)
+      Alert.alert(response.data.error)
     }
   }
 
   async function handleNavigation() {
     const user = JSON.parse(await AsyncStorage.getItem('user'))
 
-    if (user.nivel === 1) navigation.navigate('DashboardUser')
+    if (user.level === 1) navigation.navigate('DashboardUser')
 
-    if (user.nivel === 999) navigation.navigate('DashboardAdm')
+    if (user.level === 999) navigation.navigate('DashboardAdm')
 
     return
   }

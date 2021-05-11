@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Alert,
   Image,
+  AsyncStorage
 } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'
@@ -23,23 +24,29 @@ export default function Profile({ navigation }) {
   const [cpf, setCpf] = useState(null)
   const [email, setEmail] = useState(null)
   const [password, setPassword] = useState(null)
-  const [avatar, setAvatar] = useState({})
   const [cpfField, setCpfField] = useState(false)
   const [edit, setEdit] = useState(false)
   const [show, setShow] = useState(false)
-
+  const [user, setUser] = useState('')
+  
   useEffect(() => {
-    handleLoadUser()
+    (async function handleLoadUser() {
+      console.log('Puxou dados!')
+      const token = await AsyncStorage.getItem('token')
+      const user = JSON.parse(await AsyncStorage.getItem('user'))
+      console.log(user)
+      setUser(user) 
+    })()
+    //handleLoadUser()
   }, [])
 
-  async function handleLoadUser() {
-
+  /*async function handleLoadUser() {
     setIdUser(user.id)
     setName(user.name)
     setCpf(user.cpf)
     setEmail(user.email)
     setPassword(user.password)
-  }
+  }*/
 
   async function handleUserUpdate() {
     try {
@@ -85,14 +92,10 @@ export default function Profile({ navigation }) {
               edit === true ? handleUpdatePhoto() : {}
             }}
           >
-            {avatar === '' ? (
               <Image
                 style={styles.imageUser}
                 source={require('../../../assets/ImageUserExample.png')}
               />
-            ) : (
-              <Image style={styles.imageUser} source={{ uri: avatar.uri }} />
-            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -111,24 +114,17 @@ export default function Profile({ navigation }) {
           <TextInput
             editable={edit}
             style={styles.input}
-            value={name}
-            onChangeText={(value) => setName(value)}
+            value={user.name}
           />
         </View>
         <View style={styles.divInfo}>
           <Text>CPF: </Text>
           <TextInputMask
             editable={edit}
-            placeholder="CPF"
+            //placeholder="CPF"
             type={'cpf'}
             style={styles.input}
-            value={cpf}
-            onChangeText={(text, ref = null) => {
-              setCpf(text)
-            }}
-            ref={(ref) => {
-              setCpfField(ref)
-            }}
+            value={user.cpf}
           />
         </View>
         <View style={styles.divInfo}>
@@ -136,8 +132,7 @@ export default function Profile({ navigation }) {
           <TextInput
             editable={edit}
             style={styles.input}
-            value={email}
-            onChangeText={(value) => setEmail(value)}
+            value={user.email}
           />
         </View>
         {show ? (
@@ -146,8 +141,7 @@ export default function Profile({ navigation }) {
             <TextInput
               secureTextEntry={true}
               style={styles.input}
-              value={password}
-              onChangeText={(value) => setPassword(value)}
+              value={user.password}
             />
           </View>
         ) : (
@@ -164,7 +158,7 @@ export default function Profile({ navigation }) {
         )}
         <TouchableOpacity
           style={styles.btnVoltar}
-          onPress={() => navigation.navigate('UserList')}
+          onPress={() => navigation.navigate('Dashboard')}
         >
           <Text style={styles.btnText}>Voltar</Text>
         </TouchableOpacity>

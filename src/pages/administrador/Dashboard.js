@@ -9,15 +9,15 @@ import {
   StyleSheet,
 } from 'react-native'
 import { AsyncStorage } from '@react-native-async-storage/async-storage'
-
 import Header from '../../components/Header'
+import api from '../../services/api'
 
 export default function Dashboard({ navigation }) {
   const [loggedUser, setLoggedUser] = useState([])
 
-  useEffect(() => {
+  /*useEffect(() => {
     checkToken()
-  })
+  })*/
 
   async function logOut() {
     await AsyncStorage.clear()
@@ -28,11 +28,11 @@ export default function Dashboard({ navigation }) {
   return (
     <View style={styles.container}>
       <Header />
-      <Avatar />
+      
       <View style={styles.divButton}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('ProfileMe')}
+          onPress={() => navigation.navigate('ProfileUser')}
         >
           <Text style={styles.btnText}>Ver Perfil</Text>
         </TouchableOpacity>
