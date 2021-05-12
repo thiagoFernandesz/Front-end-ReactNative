@@ -1,85 +1,81 @@
-import React,
-{
-  useState,
-  useEffect
-} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-  StyleSheet,
-  View,
-  FlatList,
-  TouchableOpacity,
+    StyleSheet,
+    View,
+    Image,
+    Text,
+    SafeAreaView,
+    AsyncStorage,
+    FlatList,
 } from 'react-native'
-import { SimpleLineIcons } from '@expo/vector-icons'
 
-import ListItems from '../../components/listItems'
-import Header from '../../components/Header'
+import api from '../../services/api'
+import ListItems from '../../components/listItems/index'
+
 
 function UsersList({ navigation }) {
-  const [users, setUsers] = useState([])
+    const [users, setUsers] = useState('')
 
-  useEffect(() => {
-    handleDataUserList()
-  }, [])
+    useEffect(() => {
+        (async () => {
+            const response = await api.get('/application/usuarios')
+            await AsyncStorage.setItem('users', JSON.stringify(response.data.users))
+            setUsers(JSON.parse(await AsyncStorage.getItem('users')))
+        })()
+    }, [])
 
-  return (
-    <View style={styles.screen}>
-      <Header />
-      <TouchableOpacity
-        style={styles.buttonBack}
-        onPress={() => navigation.navigate('DashboardAdm')}
-      >
-        <SimpleLineIcons name="arrow-left" size={24} color="white" />
-      </TouchableOpacity>
-      <View style={styles.header}>
-        <Avatar />
-      </View>
-      <View style={styles.divList}>
-        <FlatList
-          data={users}
-          key={(item) => item._id}
-          renderItem={({ item }) => (
-            <ListItems data={item} navigation={navigation} />
-          )}
-          ItemSeparatorComponent={() => (
-            <View backgroundColor="#151515" height={2} />
-          )}
-        />
-      </View>
-    </View>
-  )
+    //const renderItem = ({ item }) => {     const backgroundColor = item._id === selectedId ? "#6e3b6e" : "#f9c2ff";
+
+    return (
+        <SafeAreaView style={styles.screen}>
+            <View style={styles.divLogo}>
+                <Image
+                    style={styles.logo}
+                    source={require('../../../assets/login.png')}
+                />
+            </View>
+            <Text style={styles.textInformativo}>
+                Arraste para a esquerda para desativar ou ativar um usuário</Text>
+            <View style={styles.container}>
+                <FlatList
+                    data={users}
+                    keyExtractor={item => item._id}
+                    renderItem={({ item }) => (<ListItems data={item} navigation={navigation} />)}
+                    //renderItem={ renderItem } 
+                    ItemSeparatorComponent={() => <View backgroundColor="#181818" height={2} />}
+                />
+            </View>
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#151515',
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: '#858180'
+  },
+  divLogo: {
+      backgroundColor: '#191919',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 100,
+      width: '100%',
+  },
+  container: {
+      flex: 1,
+      width: '100%',
   },
   textInformativo: {
-    fontSize: 14,
-    marginBottom: 10,
-    marginTop: 5,
-    alignSelf: 'center',
-    color: '#fff',
+      fontSize: 15,
+      marginBottom: 10,
+      marginTop: 5,
+      alignSelf: 'center',
   },
-  header: {
-    marginTop: 10,
-    maxHeight: 120,
-  },
-  buttonBack: {
-    position: 'absolute',
-    left: 1,
-    top: 23,
-    marginLeft: 10,
-    width: 40,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  divList: {
-    flex: 1,
-    width: '100%',
-  },
+  logo:{
+    height: 100,
+    width: 100
+  }
 })
 
 export default UsersList

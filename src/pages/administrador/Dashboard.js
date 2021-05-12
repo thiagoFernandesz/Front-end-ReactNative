@@ -19,8 +19,7 @@ export default function Dashboard({ navigation }) {
     checkToken()
   })*/
 
-  async function logOut() {
-    await AsyncStorage.clear()
+  function logOut() {
 
     navigation.navigate('Login')
   }

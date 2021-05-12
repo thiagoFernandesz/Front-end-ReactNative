@@ -16,9 +16,9 @@ import Header from '../../components/Header'
 export default function Dashboard({ navigation }) {
   const [loggedUser, setLoggedUser] = useState([])
 
-  useEffect(() => {
+  /*useEffect(() => {
     checkToken()
-  })
+  })*/
 
   async function checkToken() {
     const token = await AsyncStorage.getItem('token')
@@ -27,8 +27,8 @@ export default function Dashboard({ navigation }) {
     if (user) setLoggedUser(user)
   }
 
-  async function logOut() {
-    await AsyncStorage.clear()
+  function logOut() {
+     //AsyncStorage.clear()
 
     navigation.navigate('Login')
   }

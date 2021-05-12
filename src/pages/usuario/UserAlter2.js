@@ -18,7 +18,7 @@ import { TextInputMask } from 'react-native-masked-text'
 
 import Header from '../../components/Header'
 
-export default function Profile({ navigation }) {
+export default function UserAlter2({ navigation }) {
   const [idUser, setIdUser] = useState(null)
   const [name, setName] = useState(null)
   const [cpf, setCpf] = useState(null)
@@ -27,7 +27,7 @@ export default function Profile({ navigation }) {
   const [cpfField, setCpfField] = useState(false)
   const [nivel, setNivel] = useState(null)
   const [avatar, setAvatar] = useState({})
-  const [edit, setEdit] = useState(false)
+  const [edit, setEdit] = useState(true)
   const [show, setShow] = useState(false)
   const [user, setUser] = useState('')
 
@@ -125,47 +125,43 @@ export default function Profile({ navigation }) {
             }}
             style={styles.icon}
           >
-            <AntDesign name="edit" size={25} color="black"  onPress={() => navigation.navigate('UserAlter2')} />
+            <AntDesign name="edit" size={25} color="black" />
             <Text>Editar</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.divInfo}>
           <Text>Nome: </Text>
           <TextInput
-          value = "Read Only"
-          editable = {false}
+            editable={edit}
             style={styles.input}
-            value={user.name}
+            //value={user.name}
+            onChangeText={(value) => setName(value)}
           />
         </View>
         <View style={styles.divInfo}>
           <Text>CPF: </Text>
           <TextInput
-            value = "Read Only"
-            editable = {false}
+            editable={edit}
             type={'cpf'}
             style={styles.input}
-            value={user.cpf}
+            //value={user.cpf}
+            onChangeText={(value) => setCpf(value)}
           />
         </View>
         <View style={styles.divInfo}>
           <Text>E-mail: </Text>
           <TextInput
-            value = "Read Only"
-            editable = {false}
+            editable={edit}
             style={styles.input}
-            value={user.email}
+            //value={user.email}
+            onChangeText={(value) => setEmail(value)}
           />
         </View>
       </KeyboardAvoidingView>
       <View style={styles.divButton}>
-        {show ? (
           <TouchableOpacity style={styles.btnSalvar} onPress={handleUserUpdate}>
             <Text style={styles.btnText}>Salvar Alterações</Text>
           </TouchableOpacity>
-        ) : (
-          false
-        )}
         <TouchableOpacity style={styles.btnVoltar} onPress={handleNavigation}>
           <Text style={styles.btnText}>Voltar</Text>
         </TouchableOpacity>

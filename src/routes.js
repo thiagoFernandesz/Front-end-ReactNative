@@ -8,6 +8,8 @@ import ProfileMe from './pages/usuario/Profile'
 import DashboardAdm from './pages/administrador/Dashboard'
 import UserList from './pages/administrador/UserList'
 import ProfileUser from './pages/administrador/ProfileUser'
+import UserAlter from './pages/administrador/UserAlter'
+import UserAlter2 from './pages/usuario/UserAlter2'
 //Login, Register, Dashboard, DashboardU
 
 const Routes = createAppContainer(
@@ -53,6 +55,18 @@ const Routes = createAppContainer(
         screen: ProfileUser,
         navigationOptions: {
           title: 'Profile',
+        },
+      },
+      UserAlter: {
+        screen: UserAlter,
+        navigationOptions: {
+          title: 'UserAlter',
+        },
+      },
+      UserAlter2: {
+        screen: UserAlter2,
+        navigationOptions: {
+          title: 'UserAlter2',
         },
       },
     },

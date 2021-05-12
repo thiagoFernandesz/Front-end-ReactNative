@@ -18,155 +18,109 @@ import { TextInputMask } from 'react-native-masked-text'
 
 import Header from '../../components/Header'
 
-export default function Profile({ navigation }) {
-  const [idUser, setIdUser] = useState(null)
-  const [name, setName] = useState(null)
-  const [cpf, setCpf] = useState(null)
-  const [email, setEmail] = useState(null)
-  const [password, setPassword] = useState(null)
+export default function UserAlter({ navigation }) {
+  const [idUser, setIdUser] = useState('')
+  const [name, setName] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [cpfField, setCpfField] = useState(false)
-  const [nivel, setNivel] = useState(null)
-  const [avatar, setAvatar] = useState({})
-  const [edit, setEdit] = useState(false)
+  const [edit, setEdit] = useState(true)
   const [show, setShow] = useState(false)
   const [user, setUser] = useState('')
-
-  /*useEffect(() => {
-    handleLoadUser()
-  }, [])
-
-  async function handleLoadUser() {
-    const user = JSON.parse(await AsyncStorage.getItem('user'))
-
-    setIdUser(user.id)
-    setName(user.name)
-    setCpf(user.cpf)
-    setEmail(user.email)
-    setNivel(user.nivel)
-  }*/
-
+  
   useEffect(() => {
     (async function handleLoadUser() {
       console.log('Puxou dados!')
       const token = await AsyncStorage.getItem('token')
       const user = JSON.parse(await AsyncStorage.getItem('user'))
       console.log(user)
-      setUser(user) 
+      setUser(user)
+      setName(user.name)
+      setCpf(user.cpf)
+      setEmail(user.email) 
     })()
   }, [])
 
+  /*async function handleLoadUser() {
+    setIdUser(user.id)
+    setName(user.name)
+    setCpf(user.cpf)
+    setEmail(user.email)
+    setPassword(user.password)
+  }*/
+
   async function handleUserUpdate() {
     try {
-      //if (!cpfField.isValid()) return Alert.alert('CPF invalido!')
-
-      const data = new FormData()
-
-      /*const path = avatar.uri.split('/')
-      const nameImage = path[path.length - 1]
-
-        data.append('avatar', {
-        name: nameImage,
-        uri: avatar.uri,
-        type: avatar.type,
-      })*/
-
-      data.append('name', name)
-      data.append('email', email)
-      data.append('cpf', cpf)
+     
+      const id = user._id
 
       let response
 
-      if (password === null) {
-        response = (`/application/${idUser}`, data)
-      } else {
-        data.append('password', password)
-        response = (`/application/${idUser}`, data)
-      }
+        response = await api.put(`/application/${id}`, {
+          name,
+          cpf,
+          email,
+        })
 
       const { updatedUser } = response.data
 
-      await AsyncStorage.setItem('user', JSON.stringify(updatedUser))
+      await AsyncStorage.setItem('user', JSON.stringify('user'))
+      console.log(user)
 
       Alert.alert('Alterado com sucesso!')
       setEdit(false)
       setShow(false)
-
-      return
     } catch (response) {
-      Alert.alert(response.data.error)
+      Alert.alert(response.data.message)
     }
-  }
-
-  function handleNavigation() {
-    navigation.navigate('DashboardUser')
   }
 
   return (
     <View style={styles.container}>
       <Header />
-      <KeyboardAvoidingView behavior="padding" style={styles.divForm}>
-        <View style={styles.divHeaderForm}>
-          <TouchableOpacity
-            style={styles.header}
-            onPress={() => {
-              edit === true ? handlePickerCall() : {}
-            }}
-          >
-              <Image
-                style={styles.imageUser}
-                source={require('../../../assets/ImageUserExample.png')}
-              />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              setEdit(true)
-              setShow(true)
-            }}
-            style={styles.icon}
-          >
-            <AntDesign name="edit" size={25} color="black"  onPress={() => navigation.navigate('UserAlter2')} />
-            <Text>Editar</Text>
-          </TouchableOpacity>
-        </View>
+      <KeyboardAvoidingView editable={true} behavior="padding" style={styles.divForm}>
+        <View style={styles.divHeaderForm}>  
         <View style={styles.divInfo}>
           <Text>Nome: </Text>
           <TextInput
-          value = "Read Only"
-          editable = {false}
+            editable={true}
+            onChangeText={(value) => setName(value)}
             style={styles.input}
-            value={user.name}
+            //value={user.name}
+            //onChangeText={(value) => setName(value)}
           />
         </View>
         <View style={styles.divInfo}>
           <Text>CPF: </Text>
           <TextInput
-            value = "Read Only"
-            editable = {false}
+            editable={true}
+            //placeholder="CPF"
             type={'cpf'}
             style={styles.input}
-            value={user.cpf}
+            //value={user.cpf}
+            onChangeText={(value) => setCpf(value)}
           />
         </View>
         <View style={styles.divInfo}>
           <Text>E-mail: </Text>
           <TextInput
-            value = "Read Only"
-            editable = {false}
+            editable={true}
             style={styles.input}
-            value={user.email}
+            //value={user.email}
+            onChangeText={(value) => setEmail(value)}
           />
+        </View>
         </View>
       </KeyboardAvoidingView>
       <View style={styles.divButton}>
-        {show ? (
           <TouchableOpacity style={styles.btnSalvar} onPress={handleUserUpdate}>
             <Text style={styles.btnText}>Salvar Alterações</Text>
           </TouchableOpacity>
-        ) : (
-          false
-        )}
-        <TouchableOpacity style={styles.btnVoltar} onPress={handleNavigation}>
+        <TouchableOpacity
+          style={styles.btnVoltar}
+          onPress={() => navigation.navigate('DashboardAdm')}
+        >
           <Text style={styles.btnText}>Voltar</Text>
         </TouchableOpacity>
       </View>
@@ -220,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    backgroundColor: '#dddd',
+    backgroundColor: '#858180',
     width: '85%',
     color: '#222',
     fontSize: 20,

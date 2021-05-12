@@ -25,7 +25,7 @@ export default function Profile({ navigation }) {
   const [email, setEmail] = useState(null)
   const [password, setPassword] = useState(null)
   const [cpfField, setCpfField] = useState(false)
-  const [edit, setEdit] = useState(false)
+  const [edit, setEdit] = useState(true)
   const [show, setShow] = useState(false)
   const [user, setUser] = useState('')
   
@@ -35,9 +35,11 @@ export default function Profile({ navigation }) {
       const token = await AsyncStorage.getItem('token')
       const user = JSON.parse(await AsyncStorage.getItem('user'))
       console.log(user)
-      setUser(user) 
+      setUser(user)
+      setName(user.name)
+      setCpf(user.cpf)
+      setEmail(user.email) 
     })()
-    //handleLoadUser()
   }, [])
 
   /*async function handleLoadUser() {
@@ -49,37 +51,8 @@ export default function Profile({ navigation }) {
   }*/
 
   async function handleUserUpdate() {
-    try {
-      if (!cpfField.isValid()) return Alert.alert('CPF invalido!')
-
-      let response
-
-      if (password === null) {
-        response = await api.put(`/user/${idUser}`, {
-          name,
-          cpf: cpfField.getRawValue(),
-          email,
-        })
-      } else {
-        response = await api.put(`/user/${idUser}`, {
-          name,
-          cpf: cpfField.getRawValue(),
-          email,
-          password,
-        })
-      }
-
-      const { updatedUser } = response.data
-
-      Alert.alert('Alterado com sucesso!')
-      setEdit(false)
-      setShow(false)
-    } catch (response) {
-      Alert.alert(response.data.message)
-    }
+    navigation.navigate('UserAlter')
   }
-
-  async function handleUpdatePhoto() { }
 
   return (
     <View style={styles.container}>
@@ -97,7 +70,6 @@ export default function Profile({ navigation }) {
                 source={require('../../../assets/ImageUserExample.png')}
               />
           </TouchableOpacity>
-
           <TouchableOpacity
             onPress={() => {
               setEdit(true)
@@ -105,23 +77,24 @@ export default function Profile({ navigation }) {
             }}
             style={styles.icon}
           >
-            <AntDesign name="edit" size={25} color="black" />
+            <AntDesign name="edit" size={25} color="black" onPress={() => navigation.navigate('UserAlter')} />
             <Text>Editar</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.divInfo}>
           <Text>Nome: </Text>
           <TextInput
-            editable={edit}
+             value = "Read Only"
+             editable = {false}
             style={styles.input}
             value={user.name}
           />
         </View>
         <View style={styles.divInfo}>
           <Text>CPF: </Text>
-          <TextInputMask
-            editable={edit}
-            //placeholder="CPF"
+          <TextInput
+             value = "Read Only"
+             editable = {false}
             type={'cpf'}
             style={styles.input}
             value={user.cpf}
@@ -130,23 +103,12 @@ export default function Profile({ navigation }) {
         <View style={styles.divInfo}>
           <Text>E-mail: </Text>
           <TextInput
-            editable={edit}
+           value = "Read Only"
+           editable = {false}
             style={styles.input}
             value={user.email}
           />
         </View>
-        {show ? (
-          <View style={styles.divInfo}>
-            <Text>Senha: </Text>
-            <TextInput
-              secureTextEntry={true}
-              style={styles.input}
-              value={user.password}
-            />
-          </View>
-        ) : (
-          false
-        )}
       </KeyboardAvoidingView>
       <View style={styles.divButton}>
         {show ? (
@@ -158,7 +120,7 @@ export default function Profile({ navigation }) {
         )}
         <TouchableOpacity
           style={styles.btnVoltar}
-          onPress={() => navigation.navigate('Dashboard')}
+          onPress={() => navigation.navigate('DashboardAdm')}
         >
           <Text style={styles.btnText}>Voltar</Text>
         </TouchableOpacity>
