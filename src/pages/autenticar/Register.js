@@ -32,7 +32,7 @@ export default function Login({ navigation }) {
         email,
         password,
       })
-      console.log(response.data.newUser)
+      //console.log(response.data.newUser)
       const { newUser, token } = response.data
 
       Alert.alert("Usuário cadastrado")

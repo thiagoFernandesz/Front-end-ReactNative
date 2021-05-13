@@ -16,7 +16,7 @@ api.interceptors.request.use(async (config) => {
 })
 
 api.interceptors.response.use((response) => {
-  console.log(response)
+  //console.log(response)
   if (response.data.error) {
     throw response
   } else {

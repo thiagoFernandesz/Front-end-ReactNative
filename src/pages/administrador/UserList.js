@@ -21,11 +21,12 @@ function UsersList({ navigation }) {
             const response = await api.get('/application/usuarios')
             await AsyncStorage.setItem('users', JSON.stringify(response.data.users))
             setUsers(JSON.parse(await AsyncStorage.getItem('users')))
+            console.log('Console do userlist', users)
         })()
     }, [])
 
     //const renderItem = ({ item }) => {     const backgroundColor = item._id === selectedId ? "#6e3b6e" : "#f9c2ff";
-
+    console.log('ENTROU AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII', users)
     return (
         <SafeAreaView style={styles.screen}>
             <View style={styles.divLogo}>
@@ -33,21 +34,21 @@ function UsersList({ navigation }) {
                     style={styles.logo}
                     source={require('../../../assets/login.png')}
                 />
-            </View>
+            </View> 
             <Text style={styles.textInformativo}>
-                Arraste para a esquerda para desativar ou ativar um usuário</Text>
+                </Text>
             <View style={styles.container}>
                 <FlatList
                     data={users}
                     keyExtractor={item => item._id}
-                    renderItem={({ item }) => (<ListItems data={item} navigation={navigation} />)}
+                    renderItem={({ item }) => (<ListItems data={item} />)}
                     //renderItem={ renderItem } 
-                    ItemSeparatorComponent={() => <View backgroundColor="#181818" height={2} />}
+                    ItemSeparatorComponent={() => <View backgroundColor="#000" height={2} />}
                 />
             </View>
         </SafeAreaView>
     )
-}
+    }
 
 const styles = StyleSheet.create({
   screen: {

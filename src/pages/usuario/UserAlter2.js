@@ -47,10 +47,10 @@ export default function UserAlter2({ navigation }) {
 
   useEffect(() => {
     (async function handleLoadUser() {
-      console.log('Puxou dados!')
+      //console.log('Puxou dados!')
       const token = await AsyncStorage.getItem('token')
       const user = JSON.parse(await AsyncStorage.getItem('user'))
-      console.log(user)
+      //console.log(user)
       setUser(user) 
     })()
   }, [])

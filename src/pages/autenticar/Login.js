@@ -45,11 +45,11 @@ export default function Login({ navigation }) {
       setUsuario(null)
       setPassword(null)
 
-      console.log(response.data.user)
+      //console.log(response.data.user)
 
       handleNavigation()
     } catch (response) {
-      console.log('Deu ruim', response)
+      //console.log('Deu ruim', response)
       Alert.alert(response.data.error)
     }
   }
@@ -60,6 +60,8 @@ export default function Login({ navigation }) {
     if (user.level === 1) navigation.navigate('DashboardUser')
 
     if (user.level === 999) navigation.navigate('DashboardAdm')
+
+    if (user.level === 0 ) Alert.alert("Usuário desativado")
 
     return
   }

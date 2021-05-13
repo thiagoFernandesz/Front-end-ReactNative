@@ -23,7 +23,7 @@ function ListItem({ data, navigation }) {
               { text: 'Não', style: 'cancel' },
               {
                   text: 'Sim', onPress: async () => {
-                      await api.put('/application/desativa' + idUser, {
+                      await api.put('/application/desativa/' + idUser, {
                           level: 0,
                       })
                       setLevel(0)
@@ -38,13 +38,13 @@ function ListItem({ data, navigation }) {
   //ativar usuário
   async function ativar(idUser) {
       try {
-          const usuarios = await api.put('/application/ativa' + idUser, {
+          const usuarios = await api.put('/application/ativa/' + idUser, {
               level: 1,
           })
           setLevel(1)
 
       } catch (err) {
-          Alert.alert('Não é possível desativar esse usuário')
+          //Alert.alert('Não é possível desativar esse usuário')
       }
   }
 
@@ -54,7 +54,7 @@ function ListItem({ data, navigation }) {
           navigation.navigate('alterar')
 
       } catch (err) {
-          console.log(err)
+          //console.log(err)
       }
   }
 
@@ -86,6 +86,7 @@ function ListItem({ data, navigation }) {
               </View>
               <View style={styles.divInfo}>
                   <Text style={styles.text}>Nome: {data.name}</Text>
+                  <Text style={styles.text}>Email: {data.email}</Text>
                   <Text style={styles.text}>CPF: {data.cpf}</Text>
                   {level === 0 ?
                       <Text style={styles.textDesativado}>Desativado</Text>
